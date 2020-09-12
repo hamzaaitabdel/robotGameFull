@@ -1,19 +1,22 @@
 //TODO when count ==100 some fuck happend
 #include <graphics.h>
 #include <vector>
-//#include <iostream>
-//#include <cmath>
-//#include <windows.h>
+#ifndef IOSTREAM
+#define IOSTREAM
+#include <iostream>
+using namespace std;;
+#endif
 #include<fstream>
 #include<cstdlib>
 #define M_PI 3.14159265358979323846
-#include "Robot.h"
+#include "robot.h"
+#include "obstacle.h"
 
 
 
 Obstacle Tobs[15];//Tableau des obstacles
-int lastPosX[1000];
-int lastPosY[1000];
+//int lastPosX[1000];
+//int lastPosY[1000];
 int nObs = 0;
 int posCount=0;
 int xG=350;
@@ -48,35 +51,29 @@ void scanner(char fileName[50]){//
 }
 
 int main(void){
-	scanner(".\\obstacles.obs");
+	char path[] = ".\\obstacles.obs";
+	scanner(path);
 	float scale=1.0f;
 	initwindow(1230,1000,"DifferencialRobot"); 
 	
-	//int xo = 150, yo = 150, ro = 100;
-	char c;
+	
 	float alpha;
 	Robot robot;
 	
-	//char c;
-	//int r = 50;
-	//int x=400, robot.getY()= 500;
-	//int nx, ny;
-	//float alpha = .0f;
+
 	 
 	moveto(0, 0);
     
-    //int k;
-    //charobot.getR()* t;
-    //c = KEY_UP;
-    
+    char automatic[] = "AUTOMATIQUE";
+    char manual[] = "MANUELLE";
     setactivepage(0);//AUTOMATIQUE
-    outtextxy(getmaxx()/2, getmaxy()/2 -100, "AUTOMATIQUE");
-    outtextxy(getmaxx()/2, getmaxy()/2 +100, "MANUELLE");
+    outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
+    outtextxy(getmaxx()/2, getmaxy()/2 +100, manual);
     rectangle(getmaxx()/2, getmaxy()/2 -100, getmaxx()/2 + 100, getmaxy()/2 -90);
     
     setactivepage(1);//MANUELLE
-    outtextxy(getmaxx()/2, getmaxy()/2 -100, "AUTOMATIQUE");
-    outtextxy(getmaxx()/2, getmaxy()/2 +100, "MANUELLE");
+    outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
+    outtextxy(getmaxx()/2, getmaxy()/2 +100, manual);
     rectangle(getmaxx()/2, getmaxy()/2 +100, getmaxx()/2 + 100, getmaxy()/2 +110);
     
     int user_input = -1;
@@ -108,10 +105,12 @@ int main(void){
     while(user_input == 1)
     {
 		setactivepage(1); 
+		/*
 		if(!(lastPosX[posCount-1]==robot.getX()&&lastPosY[posCount-1]==robot.getY())&& posCount%5==0){
 			lastPosX[posCount]=robot.getX();
         	lastPosY[posCount]=robot.getY();
 		}
+		*/
         posCount++;
         cout<<"count pos= "<<posCount<<endl;
         alpha = robot.getDalpha();
@@ -152,23 +151,26 @@ int main(void){
 			cout << "OBS = (" << Tobs[u].getX() << ", " << Tobs[u].getY() << ", " << Tobs[u].getR() << ")\n";
 			circle(Tobs[u].getX(),Tobs[u].getY(),Tobs[u].getR());
 		}
-        //circle(xo,yo,ro);
+        /*
         setcolor(GREEN);
         setfillstyle(1,GREEN);
         for(int j=0;j<posCount;j++){
         circle(lastPosX[j],lastPosY[j],2);	
         floodfill(lastPosX[j],lastPosY[j],GREEN);
 		}
+		*/
 		setvisualpage(1);
         delay(100);
         robot.update_auto(Tobs, nObs,xG,yG);
         /////////////////////////////////////////////
      	setactivepage(0); 
+		/*
 		if(!(lastPosX[posCount-1]==robot.getX()&&lastPosY[posCount-1]==robot.getY())&& posCount%5==0){
 			lastPosX[posCount]=robot.getX();
         	lastPosY[posCount]=robot.getY();
 		}
-        posCount++;
+        */
+		posCount++;
         cout<<"count pos= "<<posCount<<endl;
         alpha = robot.getDalpha();
 		//TODO save old trajectory
@@ -209,12 +211,14 @@ int main(void){
 			circle(Tobs[u].getX(),Tobs[u].getY(),Tobs[u].getR());
 		}
         //circle(xo,yo,ro);
-        setcolor(GREEN);
+        /*
+		setcolor(GREEN);
         setfillstyle(1,GREEN);
         for(int j=0;j<posCount;j++){
         circle(lastPosX[j],lastPosY[j],2);	
         floodfill(lastPosX[j],lastPosY[j],GREEN);
 		}
+		*/
 		setvisualpage(0);
         delay(100);
         robot.update_auto(Tobs, nObs,xG,yG);
@@ -227,12 +231,12 @@ int main(void){
     {
     	cout << "dddddddd"<< endl;
         robot.update_manual(Tobs, nObs);
-        
+        /*
 		if(!(lastPosX[posCount-1]==robot.getX()&&lastPosY[posCount-1]==robot.getY())&& posCount%5==0){
 			lastPosX[posCount]=robot.getX();
         lastPosY[posCount]=robot.getY();
 		}
-		
+		*/
         posCount++;
         cout<<"count pos= "<<posCount<<endl;
         alpha = robot.getDalpha();
@@ -259,12 +263,12 @@ int main(void){
         //circle(xo,yo,ro);
         
         delay(100);
-        
+        /*
         setcolor(GREEN);
         for(int j=0;j<posCount;j++){
         circle(lastPosX[j],lastPosY[j],2);	
 		}
-        
+        */
     }
     
     while(!kbhit());     //kerobot.getY()pressé
