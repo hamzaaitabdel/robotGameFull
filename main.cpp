@@ -63,18 +63,20 @@ int main(void){
 
 	 
 	moveto(0, 0);
+    settextstyle(8, 0, 5);
     
     char automatic[] = "AUTOMATIQUE";
     char manual[] = "MANUELLE";
     setactivepage(0);//AUTOMATIQUE
-    outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
+    settextjustify(CENTER_TEXT, TOP_TEXT);
+	outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
     outtextxy(getmaxx()/2, getmaxy()/2 +100, manual);
-    rectangle(getmaxx()/2, getmaxy()/2 -100, getmaxx()/2 + 100, getmaxy()/2 -90);
+    rectangle(getmaxx()/2 - 200, getmaxy()/2 -100, getmaxx()/2 + 200, getmaxy()/2 -50);
     
     setactivepage(1);//MANUELLE
-    outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
+	outtextxy(getmaxx()/2, getmaxy()/2 -100, automatic);
     outtextxy(getmaxx()/2, getmaxy()/2 +100, manual);
-    rectangle(getmaxx()/2, getmaxy()/2 +100, getmaxx()/2 + 100, getmaxy()/2 +110);
+    rectangle(getmaxx()/2 - 200, getmaxy()/2 +100, getmaxx()/2 + 200, getmaxy()/2 +150);
     
     int user_input = -1;
     bool user_select = false;
@@ -102,7 +104,7 @@ int main(void){
 		}
 	}
     
-    while(user_input == 1)
+    while(user_input == 1 && robot.distance(robot.getX(), robot.getY(), xG, yG) > robot.getR()+100)
     {
 		setactivepage(1); 
 		/*
@@ -119,7 +121,7 @@ int main(void){
         
 		setcolor(YELLOW);
         circle(xG,yG,100);//THE GOAL
-        line(robot.getX(),robot.getY(),xG,yG);
+        //line(robot.getX(),robot.getY(),xG,yG);
         
         setcolor(3);
         circle(robot.getX(),robot.getY(),robot.getR());
@@ -178,7 +180,7 @@ int main(void){
         
 		setcolor(YELLOW);
         circle(xG,yG,100);//THE GOAL
-        line(robot.getX(),robot.getY(),xG,yG);
+        //line(robot.getX(),robot.getY(),xG,yG);
         
         setcolor(3);
         circle(robot.getX(),robot.getY(),robot.getR());
@@ -227,7 +229,16 @@ int main(void){
        
     }
     
-    while(user_input == 0)
+    char you_win[] = "OBJECTIF ATTEIND!!!";
+    
+	if(user_input == 1){
+		outtextxy(getmaxx()/2, getmaxy()/2 -100, you_win);
+		delay(3000);
+    
+	}
+    
+    
+    while(user_input == 0 && robot.distance(robot.getX(), robot.getY(), xG, yG) > robot.getR()+100)
     {
     	cout << "dddddddd"<< endl;
         robot.update_manual(Tobs, nObs);
@@ -252,10 +263,13 @@ int main(void){
         line(robot.getX() + (int)robot.getR()*cos(alpha - (M_PI/2)), robot.getY()+ (int)robot.getR()*sin(alpha - (M_PI/2)), robot.getX() + (int)robot.getR()*cos(alpha), robot.getY()+ (int)robot.getR()*sin(alpha));
         line(robot.getX() + (int)robot.getR()*cos(alpha), robot.getY()+ (int)robot.getR()*sin(alpha), robot.getX() + (int)robot.getR()*cos(alpha + (M_PI/2)), robot.getY()+ (int)robot.getR()*sin(alpha + (M_PI/2)));
         line(robot.getX() + (int)robot.getR()*cos(alpha - (M_PI/2)), robot.getY()+ (int)robot.getR()*sin(alpha - (M_PI/2)), robot.getX() + (int)robot.getR()*cos(alpha + (M_PI/2)), robot.getY()+ (int)robot.getR()*sin(alpha + (M_PI/2)));
-    	setcolor(RED);
+    	
     	/**
           *----------------------------LES OBSTACLES--------------------------------
 		***/
+		setcolor(YELLOW);
+        circle(xG,yG,100);//THE GOAL
+		setcolor(RED);
 		for(int u = 0; u<nObs; u++){
 			cout << "OBS = (" << Tobs[u].getX() << ", " << Tobs[u].getY() << ", " << Tobs[u].getR() << ")\n";
 			circle(Tobs[u].getX(),Tobs[u].getY(),Tobs[u].getR());
@@ -270,6 +284,12 @@ int main(void){
 		}
         */
     }
+    
+	if(user_input == 0){
+		outtextxy(getmaxx()/2, getmaxy()/2 -100, you_win);
+		delay(3000);
+    
+	}
     
     while(!kbhit());     //kerobot.getY()pressé
     closegraph();
